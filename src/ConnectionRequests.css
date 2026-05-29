@@ -1,0 +1,39 @@
+/* ConnectionRequests.css */
+
+.request-card {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.skill-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.skill-badge.teach {
+  background: #f2f4f2;
+  color: #2c5e50;
+}
+
+.skill-badge.learn {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.request-card:hover {
+  transform: translateX(4px);
+  transition: transform 0.2s ease;
+}

@@ -1,0 +1,157 @@
+import React, { useState } from 'react';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { sendEmailVerification, signOut } from 'firebase/auth'; // signOut অ্যাড করা হয়েছে
+import { useAuth } from './contexts/authcontext'; 
+import { db, auth } from './firebase'; // auth ইমপোর্ট করা হয়েছে
+
+const AuthModal = ({ type, close, switchModal, onAuthSuccess }) => {
+  const [formData, setFormData] = useState({
+    displayName: '',
+    email: '',
+    password: ''
+  });
+  
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const { signup, login } = useAuth();
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); 
+    setError(''); 
+    setLoading(true); 
+
+    try {
+      if (type === 'signup') {
+        
+        // ১. অ্যাকাউন্ট তৈরি করা
+        const res = await signup(formData.email, formData.password);
+        const user = res.user;
+
+        // ২. ইউজারের ইমেইলে ভেরিফিকেশন লিংক পাঠানো 
+        await sendEmailVerification(user);
+
+        // ৩. ফায়ারস্টোরে ইউজারের ডাটা সেভ করা
+        await setDoc(doc(db, "users", user.uid), {
+          uid: user.uid,
+          email: user.email,
+          displayName: formData.displayName, 
+          skillsToTeach: [],
+          skillsToLearn: [],
+          level: "Beginner"
+        });
+
+        // ৪. জোর করে লগ-আউট করে দেওয়া যাতে ভেরিফাই ছাড়া ঢুকতে না পারে!
+        await signOut(auth);
+
+        // ৫. অ্যালার্ট দিয়ে মডাল বন্ধ করে দেওয়া
+        alert("Account created successfully! 🌸 Please check your email inbox and click the link to verify your account before logging in.");
+        close(); 
+
+      } else if (type === 'signin') {
+       
+        // ১. লগইন করার চেষ্টা
+        const res = await login(formData.email, formData.password);
+        const user = res.user;
+
+        // ২. চেক করা ইমেইল ভেরিফাই হয়েছে কি না!
+        if (!user.emailVerified) {
+          await signOut(auth); // ব্যাকগ্রাউন্ড লগইন ক্লিয়ার করে দিলাম
+          setError("Please verify your email first! Check your inbox for the link.");
+          setLoading(false);
+          return; 
+        }
+
+        // ৩. ভেরিফাই করা থাকলে ডাটাবেজ থেকে নাম নিয়ে ড্যাশবোর্ডে পাঠানো
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+
+        if (userDoc.exists()) {
+          onAuthSuccess(userDoc.data().displayName);
+        } else {
+          onAuthSuccess(user.email.split('@')[0]);
+        }
+        
+        close(); 
+      }
+
+    } catch (err) {
+      console.error("Auth error:", err);
+      if(err.code === 'auth/email-already-in-use') {
+        setError("This email is already in use. Please sign in instead.");
+      } else if (err.code === 'auth/invalid-credential') {
+        setError("Wrong email or password.");
+      } else {
+        setError("Failed to authenticate. Please check your details."); 
+      }
+    }
+
+    setLoading(false); 
+  };
+
+  return (
+    <div className="modal-overlay" onClick={close}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <button className="close-btn" onClick={close}>×</button>
+        <div className="modal-header">
+          <span className="modal-logo">🌸</span>
+          <h2>{type === 'signin' ? 'Welcome back' : 'Join the nest'}</h2>
+        </div>
+
+        {error && <div style={{ color: '#d32f2f', background: '#ffebee', padding: '10px', borderRadius: '5px', marginBottom: '15px', textAlign: 'center', fontSize: '14px' }}>{error}</div>}
+
+        <form className="modal-form" onSubmit={handleSubmit}>
+          {type === 'signup' && (
+            <div className="form-group">
+              <label>Display name</label>
+              <input 
+                name="displayName"
+                type="text" 
+                placeholder="What should we call you?" 
+                value={formData.displayName}
+                onChange={handleChange}
+                required 
+              />
+            </div>
+          )}
+          <div className="form-group">
+            <label>Email</label>
+            <input 
+              name="email"
+              type="email" 
+              placeholder="you@example.com" 
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Password</label>
+            <input 
+              name="password"
+              type="password" 
+              placeholder="Your password" 
+              value={formData.password}
+              onChange={handleChange}
+              required
+              minLength="6" 
+            />
+          </div>
+          
+          <button className="btn-primary full-width" type="submit" disabled={loading}>
+            {loading ? 'Processing...' : (type === 'signin' ? 'Sign in' : 'Create my nest')}
+          </button>
+        </form>
+       
+      </div>
+    </div>
+  );
+};
+
+export default AuthModal;

@@ -1,0 +1,309 @@
+/* Matches.css - Hover animations for profile cards */
+
+/* Smooth transitions for all elements */
+.match-card {
+  transition: all 0.3s ease;
+}
+
+/* Card container styling */
+.match-card-inner {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Gradient border effect on hover */
+.match-card-inner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 1rem;
+  padding: 2px;
+  background: linear-gradient(135deg, #A15D83, #ffcfd3, #A15D83);
+  background-size: 200% 200%;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.match-card:hover .match-card-inner::before {
+  opacity: 1;
+  animation: borderGlow 2s ease infinite;
+}
+
+@keyframes borderGlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Card hover lift effect */
+.match-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.match-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(161, 93, 131, 0.15);
+}
+
+/* Profile photo container with relative positioning for badge */
+.profile-photo-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+/* Animated badge that appears on hover */
+.match-badge {
+  position: absolute;
+  bottom: -5px;
+  right: 35%;
+  background: linear-gradient(135deg, #FFB7B2, #ff6b81);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  opacity: 0;
+  transform: scale(0) rotate(-180deg);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.match-card:hover .match-badge {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+/* Profile image zoom effect */
+.profile-image {
+  transition: transform 0.3s ease;
+}
+
+.match-card:hover .profile-image {
+  transform: scale(1.1);
+}
+
+/* Profile border color change on hover */
+.profile-border {
+  transition: all 0.3s ease;
+}
+
+.match-card:hover .profile-border {
+  border-color: #A15D83 !important;
+  box-shadow: 0 0 0 4px rgba(161, 93, 131, 0.2);
+}
+
+/* Name color change on hover */
+.match-name {
+  transition: color 0.3s ease;
+}
+
+.match-card:hover .match-name {
+  color: #A15D83;
+}
+
+/* Bio text enhancement on hover */
+.match-bio {
+  transition: all 0.3s ease;
+}
+
+.match-card:hover .match-bio {
+  color: #4a5568;
+}
+
+/* Skill tags animations */
+.skill-tag-teach {
+  background: #f2f4f2;
+  color: #2c5e50;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  display: inline-block;
+  transition: all 0.3s ease;
+  margin: 0.125rem;
+}
+
+.match-card:hover .skill-tag-teach {
+  background: #A15D83;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(161, 93, 131, 0.3);
+}
+
+.skill-tag-learn {
+  background: #fff3cd;
+  color: #856404;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  display: inline-block;
+  transition: all 0.3s ease;
+  margin: 0.125rem;
+}
+
+.match-card:hover .skill-tag-learn {
+  background: #ff6b81;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(255, 107, 129, 0.3);
+}
+
+/* Skill sections slide effect */
+.skill-section {
+  transition: transform 0.3s ease;
+}
+
+.match-card:hover .skill-section-teach {
+  transform: translateX(3px);
+}
+
+.match-card:hover .skill-section-learn {
+  transform: translateX(3px);
+  transition-delay: 0.05s;
+}
+
+/* Match score animation */
+.match-score {
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.match-card:hover .match-score {
+  transform: scale(1.2);
+  color: #8B4D6F;
+}
+
+/* Connect button animations */
+.connect-btn {
+  background: linear-gradient(135deg, #A15D83, #8B4D6F);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ripple effect on hover */
+.connect-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.connect-btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Button scale on hover */
+.connect-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(161, 93, 131, 0.4);
+}
+
+/* Button click effect */
+.connect-btn:active {
+  transform: scale(0.95);
+}
+
+/* Ripple effect on click */
+.connect-btn:active::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  animation: ripple 0.4s ease-out;
+}
+
+@keyframes ripple {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0.5;
+  }
+  100% {
+    width: 200px;
+    height: 200px;
+    opacity: 0;
+  }
+}
+
+/* Card entry animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Pulse effect for match score on hover */
+
+/* Shake effect on connect button (optional) */
+
+
+
+/* Glow effect on card 
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px rgba(161, 93, 131, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(161, 93, 131, 0.4);
+  }
+}*/
+
+.match-card:hover {
+  animation: glow 0.5s ease;
+}
+
+/* Optional: Floating animation for badge */
+
+
+.match-card:hover .match-badge {
+  animation: float 1s ease infinite;
+}
