@@ -4,14 +4,14 @@ import { Link } from 'react-router-dom';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Add this import
+import { useNavigate } from 'react-router-dom'; 
 
 const Home = ({ user, onLogout }) => {
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate(); 
   const [profilePhoto, setProfilePhoto] = useState('');
   const [userName, setUserName] = useState('');
 
-  // Fetch user's profile data including photo
+  
   useEffect(() => {
     const fetchUserProfile = async () => {
       const auth = getAuth();
@@ -41,13 +41,13 @@ const Home = ({ user, onLogout }) => {
     fetchUserProfile();
   }, [user]);
 
-  // Navigation handlers
+  
   const goToMatches = () => {
     navigate('/matches');
   };
 
   const goToUpdateSkills = () => {
-    navigate('/profile'); // Navigate to profile page to update skills
+    navigate('/profile'); 
   };
 
   const goToChatList = () => {
@@ -65,7 +65,7 @@ const Home = ({ user, onLogout }) => {
         
         <div className="header-right" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
           
-          {/* Profile section with image */}
+          
           <Link 
             to="/profile" 
             className="user-profile" 

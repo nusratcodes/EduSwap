@@ -110,7 +110,7 @@
   color: #ff6b81;
   border-color: #ff6b81;
 }
-/* Add to Home.css - Fix header alignment */
+
 .dashboard-header {
   display: flex;
   justify-content: space-between;
@@ -122,7 +122,7 @@
   padding: 0 20px;
 }
 
-/* Ensure navbar and simple header have same alignment */
+
 .navbar, 
 .simple-header {
   max-width: 1200px;
@@ -131,7 +131,7 @@
   width: 100%;
 }
 
-/* Remove any extra padding from simple-header */
+
 .simple-header {
   background: transparent !important;
   padding: 20px !important;

@@ -1,4 +1,3 @@
-// Matches.js
 import React, { useState, useEffect } from 'react';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, query, where, getDocs, doc, getDoc, setDoc } from 'firebase/firestore';
@@ -13,7 +12,7 @@ const Matches = () => {
   const [loading, setLoading] = useState(true);
   const [currentUserSkills, setCurrentUserSkills] = useState({ teach: [], learn: [] });
   const [searchTerm, setSearchTerm] = useState('');
-  const [sentRequestIds, setSentRequestIds] = useState([]); // ADD THIS - Track sent requests
+  const [sentRequestIds, setSentRequestIds] = useState([]); 
 
   useEffect(() => {
     fetchAllUsers();
@@ -23,14 +22,14 @@ const Matches = () => {
     filterUsers();
   }, [searchTerm, allUsers]);
 
-  // ADD THIS - Check for existing sent requests
+ 
   useEffect(() => {
     if (allUsers.length > 0) {
       checkExistingRequests();
     }
   }, [allUsers]);
 
-  // ADD THIS FUNCTION - Check existing sent requests
+
   const checkExistingRequests = async () => {
     const auth = getAuth();
     const db = getFirestore();
@@ -153,7 +152,7 @@ const Matches = () => {
     navigate('/');
   };
 
-  // Updated sendConnectionRequest function
+ 
   const sendConnectionRequest = async (receiverId, receiverName, matchingTeachToLearn, matchingLearnToTeach) => {
     const auth = getAuth();
     const db = getFirestore();
@@ -168,7 +167,7 @@ const Matches = () => {
       console.log("Sending request to:", receiverId);
       console.log("Current user:", currentUser.uid);
       
-      // Check if request already exists
+     
       const existingQuery = query(
         collection(db, "connection_requests"),
         where("senderId", "==", currentUser.uid),
@@ -182,7 +181,7 @@ const Matches = () => {
         return;
       }
 
-      // Check if already connected
+      
       const connectionsQuery = query(
         collection(db, "connections"),
         where("userId1", "in", [currentUser.uid, receiverId]),
@@ -196,7 +195,7 @@ const Matches = () => {
         return;
       }
 
-      // CORRECTED: Create new connection request with proper structure
+      
       const requestData = {
         senderId: currentUser.uid,
         receiverId: receiverId,
@@ -216,7 +215,7 @@ const Matches = () => {
       
       console.log("Request saved with ID:", requestRef.id);
       
-      // UPDATE - Add to sentRequestIds state
+      
       setSentRequestIds(prev => [...prev, receiverId]);
       
       alert(`Connection request sent to ${receiverName}! 💌`);
@@ -229,7 +228,7 @@ const Matches = () => {
   return (
     <div className="min-h-screen bg-transparent py-10 px-4 md:px-20 font-sans">
       
-      {/* Header */}
+      
       <div className="max-w-6xl mx-auto mb-8">
         <div className="flex justify-between items-center">
           <div>
@@ -267,7 +266,7 @@ const Matches = () => {
         </div>
       </div>
 
-      {/* Search Section */}
+      
       <div className="max-w-6xl mx-auto mb-8">
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
           <div className="flex flex-col md:flex-row gap-4 items-center">
@@ -304,7 +303,7 @@ const Matches = () => {
         </div>
       </div>
 
-      {/* Current Skills Summary */}
+      
       <div className="max-w-6xl mx-auto mb-8">
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
           <h3 className="text-lg font-semibold text-[#1a3d36] mb-3">Your Skills Summary</h3>
@@ -341,7 +340,7 @@ const Matches = () => {
         </div>
       </div>
 
-      {/* Users Grid with Equal Card Sizes & Hover Effects */}
+      
       <div className="max-w-6xl mx-auto">
         {loading ? (
           <div className="text-center py-12">
@@ -353,7 +352,7 @@ const Matches = () => {
             {displayedUsers.map((user) => (
               <div key={user.id} className="match-card h-full">
                 <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 match-card-inner h-full flex flex-col">
-                  {/* Profile Photo with hover effects */}
+                 
                   <div className="profile-photo-container flex-shrink-0">
                     <div className="flex justify-center mb-4">
                       <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-100 border-4 border-[#ffcfd3] profile-border">
@@ -372,19 +371,19 @@ const Matches = () => {
                     </div>
                   </div>
                   
-                  {/* Name with hover effect */}
+                 
                   <h3 className="text-xl font-bold text-[#1a3d36] text-center mb-2 match-name flex-shrink-0">
                     {user.name}
                   </h3>
                   
-                  {/* Bio with hover effect */}
+                  
                   {user.bio && (
                     <p className="text-gray-600 text-sm text-center mb-4 line-clamp-2 match-bio flex-shrink-0" style={{ minHeight: '40px' }}>
                       {user.bio}
                     </p>
                   )}
                   
-                  {/* Skills Section - Grows to fill space */}
+                  
                   <div className="flex-grow">
                     {user.matchingTeachToLearn.length > 0 && (
                       <div className="mb-3 skill-section skill-section-teach">
@@ -412,7 +411,7 @@ const Matches = () => {
                       </div>
                     )}
 
-                    {/* Show all skills if no matches (for search results) */}
+                   
                     {user.matchScore === 0 && searchTerm && (
                       <>
                         {user.teachSkills.length > 0 && (
@@ -444,7 +443,7 @@ const Matches = () => {
                     )}
                   </div>
                   
-                  {/* Match Score & Send Request Button - Always at bottom - UPDATED BUTTON */}
+                 
                   <div className="flex justify-between items-center mt-4 pt-3 border-t border-gray-100 flex-shrink-0">
                     <span className="text-sm text-gray-500">
                       Match score: <strong className="text-[#A15D83] match-score">{user.matchScore}</strong>

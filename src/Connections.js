@@ -1,4 +1,3 @@
-// Connections.js - Fixed to show connections for both users with delete functionality
 import React, { useState, useEffect } from 'react';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, query, where, getDocs, doc, getDoc, deleteDoc, writeBatch } from 'firebase/firestore';
@@ -28,7 +27,7 @@ const Connections = () => {
     console.log("Fetching connections for user:", currentUser.uid);
 
     try {
-      // Query ALL active connections (not just where userId1 matches)
+    
       const connectionsQuery = query(
         collection(db, "connections"),
         where("status", "==", "active")
@@ -42,18 +41,18 @@ const Connections = () => {
       for (const docSnapshot of snapshot.docs) {
         const connectionData = docSnapshot.data();
         
-        // Check if current user is involved in this connection (either as userId1 OR userId2)
+        
         const isUserInConnection = connectionData.userId1 === currentUser.uid || connectionData.userId2 === currentUser.uid;
         
         if (isUserInConnection) {
-          // Find the other user's ID
+          
           const otherUserId = connectionData.userId1 === currentUser.uid 
             ? connectionData.userId2 
             : connectionData.userId1;
           
           console.log("Found connection with user:", otherUserId);
           
-          // Fetch other user's details
+          
           const userRef = doc(db, "users", otherUserId);
           const userSnap = await getDoc(userRef);
           
@@ -87,7 +86,7 @@ const Connections = () => {
     }
   };
 
-  // Delete connection function
+ 
   const deleteConnection = async (connectionId, connectionName, userId1, userId2, e) => {
     e.stopPropagation();
     
@@ -104,11 +103,11 @@ const Connections = () => {
     try {
       const batch = writeBatch(db);
       
-      // Delete the connection document
+      
       const connectionRef = doc(db, "connections", connectionId);
       batch.delete(connectionRef);
       
-      // Find the chat ID and delete it
+     
       const chatId = [currentUser.uid, (userId1 === currentUser.uid ? userId2 : userId1)].sort().join('_');
       const chatRef = doc(db, "chats", chatId);
       batch.delete(chatRef);
@@ -118,7 +117,7 @@ const Connections = () => {
       console.log(`Connection and chat deleted for ${connectionName}`);
       alert(`Removed ${connectionName} from your connections.`);
       
-      // Refresh the connections list
+      
       await fetchConnections();
       
     } catch (error) {
@@ -188,7 +187,7 @@ const Connections = () => {
                   </div>
                 </div>
                 
-                {/* Show matching skills if any */}
+                
                 {connection.teachSkills.length > 0 && (
                   <div className="mt-3">
                     <div className="flex flex-wrap gap-1">

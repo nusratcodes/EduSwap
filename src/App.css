@@ -550,9 +550,7 @@ html {
   scroll-behavior: smooth;
 }
 
-/* ==================================================
-   HEADER STYLES
-================================================== */
+
 .simple-header {
   display: flex;
   align-items: center;
@@ -565,9 +563,7 @@ html {
   backdrop-filter: blur(10px);
 }
 
-/* ==================================================
-   SIMPLE SPLASH BACKGROUND (PURE BACKGROUND ONLY)
-================================================== */
+
 .splash-bg {
   position: fixed;
   top: 0;

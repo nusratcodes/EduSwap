@@ -16,14 +16,14 @@ import ChatList from './ChatList';
 
 const SplashBackground = () => (
   <div className="splash-bg">
-    {/* Large soft watercolor washes */}
+   
     <div className="watercolor-wash wash-1" />
     <div className="watercolor-wash wash-2" />
     <div className="watercolor-wash wash-3" />
     <div className="watercolor-wash wash-4" />
     <div className="watercolor-wash wash-5" />
     
-    {/* Paint splatter drops */}
+   
     <div className="splatter splatter-1" />
     <div className="splatter splatter-2" />
     <div className="splatter splatter-3" />
@@ -31,7 +31,7 @@ const SplashBackground = () => (
     <div className="splatter splatter-5" />
     <div className="splatter splatter-6" />
     
-    {/* Fine paint droplets */}
+    
     <div className="droplet droplet-1" />
     <div className="droplet droplet-2" />
     <div className="droplet droplet-3" />
@@ -54,7 +54,7 @@ const LogoIcon = () => (
   </svg>
 );
 
-// Original Navbar - ONLY for landing page (not logged in)
+
 const Navbar = ({ openModal, user, handleLogout }) => (
   <nav className="navbar">
     <div className="logo" style={{ cursor: 'pointer' }}>
@@ -79,14 +79,14 @@ const Navbar = ({ openModal, user, handleLogout }) => (
   </nav>
 );
 
-// App.js - SimpleHeader component update
+
 const SimpleHeader = () => (
   <div className="simple-header" style={{
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
     padding: '16px 32px',
-    position: 'relative', /* <--- CHANGED FROM 'sticky' TO 'relative' */
+    position: 'relative', 
     top: 0,
     zIndex: 100,
     background: 'transparent'
@@ -298,13 +298,12 @@ export default function App() {
     });
   };
 
-  // Show full navbar ONLY on landing page (path === '/')
-  // For all other pages (dashboard), show simple header with transparency
+  
   const showFullNavbar = !user && location.pathname === '/';
   return (
     <AuthProvider>
       <div className="app" style={{ position: 'relative', minHeight: '100vh' }}>
-        {/* SPLASH BACKGROUND - Added here for colorful paint effect */}
+        
         <SplashBackground />
         
         {showFullNavbar ? (

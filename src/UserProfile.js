@@ -1,4 +1,3 @@
-// UserProfile.js - Fixed version with working chat navigation
 import React, { useState, useEffect } from 'react';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';

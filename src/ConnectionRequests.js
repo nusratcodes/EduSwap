@@ -1,4 +1,3 @@
-// ConnectionRequests.js - Fixed version
 import React, { useState, useEffect } from 'react';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, query, where, getDocs, doc, getDoc, updateDoc, deleteDoc, writeBatch, setDoc } from 'firebase/firestore';
@@ -17,7 +16,7 @@ const ConnectionRequests = () => {
     fetchRequests();
   }, []);
 
-  // Fixed fetchRequests function
+  
   const fetchRequests = async () => {
     const auth = getAuth();
     const db = getFirestore();
@@ -33,7 +32,7 @@ const ConnectionRequests = () => {
     try {
       console.log("Fetching requests for user:", currentUser.uid);
       
-      // Fetch received requests (where current user is the receiver)
+     
       const receivedQuery = query(
         collection(db, "connection_requests"),
         where("receiverId", "==", currentUser.uid),
@@ -48,7 +47,7 @@ const ConnectionRequests = () => {
         const requestData = requestDoc.data();
         console.log("Received request data:", requestData);
         
-        // Fetch sender details
+        
         const senderRef = doc(db, "users", requestData.senderId);
         const senderSnap = await getDoc(senderRef);
         
@@ -68,7 +67,7 @@ const ConnectionRequests = () => {
         }
       }
 
-      // Fetch sent requests (where current user is the sender)
+      
       const sentQuery = query(
         collection(db, "connection_requests"),
         where("senderId", "==", currentUser.uid),
@@ -83,7 +82,7 @@ const ConnectionRequests = () => {
         const requestData = requestDoc.data();
         console.log("Sent request data:", requestData);
         
-        // Fetch receiver details
+       
         const receiverRef = doc(db, "users", requestData.receiverId);
         const receiverSnap = await getDoc(receiverRef);
         
@@ -114,14 +113,14 @@ const ConnectionRequests = () => {
     }
   };
 
-  // Updated acceptRequest function with connection check
+  
   const acceptRequest = async (requestId, senderId) => {
     const db = getFirestore();
     const auth = getAuth();
     const currentUser = auth.currentUser;
 
     try {
-      // First, check if a connection already exists
+    
       const existingConnectionQuery = query(
         collection(db, "connections"),
         where("userId1", "in", [currentUser.uid, senderId]),
@@ -137,11 +136,11 @@ const ConnectionRequests = () => {
       
       const batch = writeBatch(db);
       
-      // Update request status
+      
       const requestRef = doc(db, "connection_requests", requestId);
       batch.update(requestRef, { status: "accepted", updatedAt: new Date() });
       
-      // Create new connection document
+    
       const connectionRef = doc(collection(db, "connections"));
       batch.set(connectionRef, {
         userId1: currentUser.uid,
@@ -160,7 +159,7 @@ const ConnectionRequests = () => {
     }
   };
 
-  // Updated rejectRequest function with connection deletion
+ 
   const rejectRequest = async (requestId, senderId) => {
     const db = getFirestore();
     const auth = getAuth();
@@ -169,14 +168,14 @@ const ConnectionRequests = () => {
     try {
       const batch = writeBatch(db);
       
-      // Update request status to rejected
+    
       const requestRef = doc(db, "connection_requests", requestId);
       batch.update(requestRef, { 
         status: "rejected", 
         updatedAt: new Date() 
       });
       
-      // ALSO DELETE any existing connection document between these users
+     
       const connectionsQuery = query(
         collection(db, "connections"),
         where("userId1", "in", [currentUser.uid, senderId]),
@@ -198,7 +197,7 @@ const ConnectionRequests = () => {
     }
   };
 
-  // Updated cancelRequest function with connection deletion
+
   const cancelRequest = async (requestId, receiverId) => {
     const db = getFirestore();
     const auth = getAuth();
@@ -207,11 +206,11 @@ const ConnectionRequests = () => {
     try {
       const batch = writeBatch(db);
       
-      // Delete the request document
+      
       const requestRef = doc(db, "connection_requests", requestId);
       batch.delete(requestRef);
       
-      // ALSO DELETE any existing connection document between these users
+      
       const connectionsQuery = query(
         collection(db, "connections"),
         where("userId1", "in", [currentUser.uid, receiverId]),
@@ -241,7 +240,7 @@ const ConnectionRequests = () => {
     navigate(`/user/${userId}`);
   };
 
-  // Debug function to test Firestore connection (for reference)
+ 
   const testFirestoreConnection = async () => {
     const auth = getAuth();
     const db = getFirestore();
@@ -291,7 +290,7 @@ const ConnectionRequests = () => {
         </div>
       </div>
 
-      {/* Tabs */}
+     
       <div className="max-w-4xl mx-auto mb-6">
         <div className="flex gap-2 border-b border-gray-200">
           <button
@@ -317,7 +316,7 @@ const ConnectionRequests = () => {
         </div>
       </div>
 
-      {/* Requests List */}
+  
       <div className="max-w-4xl mx-auto">
         {loading ? (
           <div className="text-center py-12">

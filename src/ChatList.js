@@ -1,4 +1,3 @@
-// ChatList.js - Soft delete (chat disappears from list)
 import React, { useState, useEffect } from 'react';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, getDocs, doc, getDoc, updateDoc } from 'firebase/firestore';
@@ -37,12 +36,12 @@ const ChatList = () => {
       for (const chatDoc of chatsSnapshot.docs) {
         const chatData = chatDoc.data();
         
-        // Check if current user is a participant
+       
         if (chatData.participants && chatData.participants[currentUser.uid]) {
-          // Check if the user has deleted/hidden this chat
+          
           const isHiddenForUser = chatData.hiddenFor && chatData.hiddenFor[currentUser.uid] === true;
           
-          // Only show chats that are NOT hidden by current user
+         
           if (!isHiddenForUser) {
             const otherUserId = Object.keys(chatData.participants).find(id => id !== currentUser.uid);
             
@@ -82,7 +81,7 @@ const ChatList = () => {
     }
   };
 
-  // Soft delete - hide chat from current user's list
+  
   const hideChat = async (chatId, chatName, e) => {
     e.stopPropagation();
     
@@ -101,7 +100,7 @@ const ChatList = () => {
       const chatSnap = await getDoc(chatRef);
       const chatData = chatSnap.data();
       
-      // Mark this chat as hidden for current user
+      
       const updatedHiddenFor = {
         ...(chatData.hiddenFor || {}),
         [currentUser.uid]: true
@@ -114,7 +113,7 @@ const ChatList = () => {
       console.log(`Chat ${chatId} hidden for user ${currentUser.uid}`);
       alert(`Conversation with ${chatName} has been hidden. It will reappear when you send a new message.`);
       
-      // Refresh the chat list
+      
       await loadChats();
       
     } catch (error) {

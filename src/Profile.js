@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { getAuth, onAuthStateChanged, updateProfile } from 'firebase/auth';
 import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom'; 
 
 
 const Profile = () => {
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate(); 
   
-  // Basic States
+  
   const [displayName, setDisplayName] = useState('');
   const [bio, setBio] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
 
-  // Image States
+  
   const [previewUrl, setPreviewUrl] = useState('');
   const [imageFile, setImageFile] = useState(null);
 
-  // Skill States
+  
   const [teachInput, setTeachInput] = useState('');
   const [teachSkills, setTeachSkills] = useState([]);
   const [learnInput, setLearnInput] = useState('');
   const [learnSkills, setLearnSkills] = useState([]);
 
-  // Fetch user data with auto display name from email handle
+  
   useEffect(() => {
     const auth = getAuth();
     const db = getFirestore();
@@ -36,7 +36,7 @@ const Profile = () => {
           if (userSnap.exists()) {
             const data = userSnap.data();
             
-            // Auto set display name: Firestore name > Auth name > Email handle
+            
             setDisplayName(
               data.displayName || 
               currentUser.displayName || 
@@ -51,7 +51,7 @@ const Profile = () => {
             setPreviewUrl(photo);
             setAvatarUrl(photo);
           } else {
-            // If no Firestore data, use email handle or Auth displayName
+            
             const emailHandle = currentUser.email ? currentUser.email.split('@')[0] : '';
             setDisplayName(currentUser.displayName || emailHandle);
             if (currentUser.photoURL) {
@@ -68,7 +68,7 @@ const Profile = () => {
     return () => unsubscribe();
   }, []);
 
-  // Handle image selection and preview
+  
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -78,7 +78,7 @@ const Profile = () => {
     }
   };
 
-  // Save profile to Firebase Auth and Firestore
+  
   const handleSaveProfile = async () => {
     const auth = getAuth();
     const db = getFirestore();
@@ -92,7 +92,7 @@ const Profile = () => {
     try {
       let finalPhotoUrl = avatarUrl;
 
-      // Upload to ImgBB if a new image was selected
+     
       if (imageFile) {
         alert("Uploading image... ⏳");
         const formData = new FormData();
@@ -112,13 +112,13 @@ const Profile = () => {
         }
       }
 
-      // Update Firebase Auth profile
+     
       await updateProfile(currentUser, {
         displayName: displayName,
         photoURL: finalPhotoUrl
       });
 
-      // Update Firestore
+      
       const userRef = doc(db, "users", currentUser.uid);
       await setDoc(userRef, {
         displayName,
@@ -132,7 +132,7 @@ const Profile = () => {
 
       setPreviewUrl(finalPhotoUrl);
       setAvatarUrl(finalPhotoUrl);
-      setImageFile(null); // Clear image file after upload
+      setImageFile(null); 
       alert('Profile saved successfully! 🌸');
 
     } catch (error) {
@@ -141,7 +141,7 @@ const Profile = () => {
     }
   };
 
-  // Add skill functions
+  
   const handleAddTeachSkill = (e) => {
     e.preventDefault();
     if (teachInput.trim() !== '') {
@@ -166,7 +166,7 @@ const Profile = () => {
     setLearnSkills(learnSkills.filter((_, i) => i !== index));
   };
 
-  // Navigate to Home page
+  
   const goToHome = () => {
     navigate('/');
   };
@@ -174,7 +174,7 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-transparent py-10 px-4 md:px-20 font-sans">
       
-      {/* Page Header with Dashboard Button */}
+     
       <div className="max-w-3xl mx-auto mb-8">
         <div className="flex justify-between items-center">
           <div>
@@ -186,7 +186,7 @@ const Profile = () => {
             </p>
           </div>
           
-          {/* Dashboard Button */}
+          
           <button
             onClick={goToHome}
             className="bg-[#A15D83] text-white px-8 py-3 rounded-full font-medium hover:bg-[#A15D83] transition-colors shadow-sm"
@@ -197,10 +197,10 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* Profile Form Card */}
+     
       <div className="max-w-3xl mx-auto bg-white rounded-[2rem] p-8 md:p-12 shadow-sm border border-gray-100">
         
-        {/* Profile Picture Section */}
+        
         <div className="flex flex-col items-center mb-8">
           <div className="w-28 h-28 rounded-full overflow-hidden bg-gray-100 border-4 border-[#ffcfd3] shadow-sm mb-3">
             {previewUrl ? (
@@ -210,7 +210,7 @@ const Profile = () => {
             )}
           </div>
           
-          {/* Photo Upload Button */}
+         
           <label className="cursor-pointer bg-[#e9ecef] hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm font-medium transition-colors">
             Change Photo
             <input 
@@ -223,7 +223,7 @@ const Profile = () => {
         </div>
 
         <form className="space-y-8">
-          {/* Display Name */}
+          
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Display name</label>
             <input 
@@ -235,7 +235,7 @@ const Profile = () => {
             />
           </div>
 
-          {/* Bio */}
+          
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Bio</label>
             <textarea 
@@ -247,7 +247,7 @@ const Profile = () => {
             ></textarea>
           </div>
 
-          {/* Skills you can teach */}
+        
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Skills you can teach 🌱</label>
             <div className="flex gap-2">
@@ -277,7 +277,7 @@ const Profile = () => {
             </div>
           </div>
 
-          {/* Skills you want to learn */}
+          
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Skills you want to learn ✨</label>
             <div className="flex gap-2">
@@ -307,7 +307,7 @@ const Profile = () => {
             </div>
           </div>
 
-          {/* Save Button */}
+         
           <div className="pt-4 flex gap-4">
             <button
               type="button"
@@ -317,7 +317,7 @@ const Profile = () => {
               Save profile
             </button>
             
-            {/* Optional: Cancel/Back button */}
+            
             <button
               type="button"
               onClick={goToHome}

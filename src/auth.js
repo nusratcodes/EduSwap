@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
-import { sendEmailVerification, signOut } from 'firebase/auth'; // signOut অ্যাড করা হয়েছে
+import { sendEmailVerification, signOut } from 'firebase/auth'; 
 import { useAuth } from './contexts/authcontext'; 
-import { db, auth } from './firebase'; // auth ইমপোর্ট করা হয়েছে
+import { db, auth } from './firebase'; 
 
 const AuthModal = ({ type, close, switchModal, onAuthSuccess }) => {
   const [formData, setFormData] = useState({
@@ -31,14 +31,14 @@ const AuthModal = ({ type, close, switchModal, onAuthSuccess }) => {
     try {
       if (type === 'signup') {
         
-        // ১. অ্যাকাউন্ট তৈরি করা
+        
         const res = await signup(formData.email, formData.password);
         const user = res.user;
 
-        // ২. ইউজারের ইমেইলে ভেরিফিকেশন লিংক পাঠানো 
+        
         await sendEmailVerification(user);
 
-        // ৩. ফায়ারস্টোরে ইউজারের ডাটা সেভ করা
+       
         await setDoc(doc(db, "users", user.uid), {
           uid: user.uid,
           email: user.email,
@@ -48,28 +48,28 @@ const AuthModal = ({ type, close, switchModal, onAuthSuccess }) => {
           level: "Beginner"
         });
 
-        // ৪. জোর করে লগ-আউট করে দেওয়া যাতে ভেরিফাই ছাড়া ঢুকতে না পারে!
+       
         await signOut(auth);
 
-        // ৫. অ্যালার্ট দিয়ে মডাল বন্ধ করে দেওয়া
+       
         alert("Account created successfully! 🌸 Please check your email inbox and click the link to verify your account before logging in.");
         close(); 
 
       } else if (type === 'signin') {
        
-        // ১. লগইন করার চেষ্টা
+        
         const res = await login(formData.email, formData.password);
         const user = res.user;
 
-        // ২. চেক করা ইমেইল ভেরিফাই হয়েছে কি না!
+        
         if (!user.emailVerified) {
-          await signOut(auth); // ব্যাকগ্রাউন্ড লগইন ক্লিয়ার করে দিলাম
+          await signOut(auth); 
           setError("Please verify your email first! Check your inbox for the link.");
           setLoading(false);
           return; 
         }
 
-        // ৩. ভেরিফাই করা থাকলে ডাটাবেজ থেকে নাম নিয়ে ড্যাশবোর্ডে পাঠানো
+        
         const userDoc = await getDoc(doc(db, "users", user.uid));
 
         if (userDoc.exists()) {
